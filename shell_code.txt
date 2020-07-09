@@ -1,0 +1,21 @@
+>>> from api_basic.models import Article
+>>> from api_basic.serializers import ArticleSerializer
+>>> from rest_framework.renderers import JSONRenderer
+>>> from rest_framework.parsers import JSONParser
+
+
+    >>> a = Article(title='Article Title', author='akash', email='akash@gmail.com')
+    >>> a.save()
+    >>> a = Article(title='Article Title2', author='ram', email='ram@gmail.com')
+    >>> a.save()
+    >>> serializer = ArticleSerializer(a)
+    >>> serializer.data
+    {'title': 'Article Title2', 'author': 'ram', 'email': 'ram@gmail.com', 'date': '2020-07-09T03:50:37.578511Z'}
+    >>> content = JSONRenderer().render(serializer.data)
+    >>> content
+    b'{"title":"Article Title2","author":"ram","email":"ram@gmail.com","date":"2020-07-09T03:50:37.578511Z"}'
+
+
+    >>> serializer = ArticleSerializer(Article.objects.all(),many=True)
+    >>> serializer.data
+    [OrderedDict([('title', 'Article Title'), ('author', 'akash'), ('email', 'akash@gmail.com'), ('date', '2020-07-09T03:46:46.591321Z')]), OrderedDict([('title', 'Article Title2'), ('author', 'ram'), ('email', 'ram@gmail.com'), ('date', '2020-07-09T03:50:37.578511Z')])]
