@@ -14,6 +14,8 @@ from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework import mixins
 
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 
 class GenericAPIView(generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin,mixins.UpdateModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin):
@@ -21,6 +23,8 @@ class GenericAPIView(generics.GenericAPIView, mixins.ListModelMixin, mixins.Crea
     queryset = Article.objects.all()
 
     lookup_field ='id'
+    authontication_calsses = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, id = None):
         if id:
@@ -36,9 +40,6 @@ class GenericAPIView(generics.GenericAPIView, mixins.ListModelMixin, mixins.Crea
 
     def delete(self, request, id):
         return self.destroy(request, id)
-
-
-
 
 
 #################################
@@ -83,10 +84,6 @@ class ArticleDetails(APIView):
         article = self.get_object(id)
         article.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-
-
 
 
 ##############################
